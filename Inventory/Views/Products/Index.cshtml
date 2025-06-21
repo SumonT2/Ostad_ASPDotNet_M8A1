@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Inventory.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4 p-4 bg-white shadow-sm rounded">
+    <h1 class="display-6 text-primary d-flex align-items-center">
+        <span class="me-2">📦</span> Inventory Management System
+    </h1>
+    <a asp-action="Create" class="btn btn-primary mb-3">+ Add Product</a>
+
+    <form asp-action="Index" method="get">
+    <div class="row mb-3">
+        <div class="col">
+                <input type="text" class="form-control" name="searchString" placeholder="Search by product name..." value="@Context.Request.Query["searchString"]" />
+
+        </div>
+        <div class="col">
+    <select name="category" class="form-select" onchange="this.form.submit()">
+        <option value="">All Categories</option>
+        @foreach (var item in ViewBag.CategoryList as SelectList)
+        {
+                        <option value="@item.Text" selected="@(item.Text == (string)ViewBag.SelectedCategory ? "selected" : null)">
+                            @item.Text
+                        </option>
+                    }
+    </select>
+        </div>
+    </div>
+    </form>
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+                string status = item.Quantity == 0 ? "Out of Stock" :
+                item.Quantity < 10 ? "Low Stock" :
+                "In Stock";
+                var statusClass = status switch
+            {
+                    "In Stock" => "badge bg-success text-white rounded-pill fs-6",
+                    "Low Stock" => "badge bg-warning text-white rounded-pill fs-6",
+                    "Out of Stock" => "badge bg-danger text-white rounded-pill fs-6",
+                    _ => "badge bg-secondary text-white rounded-pill fs-6"
+            };
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Category</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>@item.Quantity</td>
+                 <td><span class="@statusClass">@status</span></td> 
+                <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-md px-2"><i class="fa-solid fa-eye"></i> View</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-md px-2"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-md px-2"><i class="fa-solid fa-trash"></i> Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
