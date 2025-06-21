@@ -9,7 +9,7 @@
     <h1 class="display-6 text-primary d-flex align-items-center">
         <span class="me-2">📦</span> Inventory Management System
     </h1>
-    <a asp-action="Create" class="btn btn-primary mb-3">+ Add Product</a>
+    <a asp-action="Create" class="btn btn-primary mb-3"><i class="fa-solid fa-plus"></i> Add Product</a>
 
     <form asp-action="Index" method="get">
     <div class="row mb-3">
@@ -30,8 +30,8 @@
         </div>
     </div>
     </form>
-    <table class="table table-striped">
-        <thead class="table-dark">
+    <table class="table table-striped rounded" style="border-radius: 0.5rem; overflow: hidden; border: 1px solid #dee2e6;">
+        <thead class="table-dark" >
             <tr>
                 <th>ID</th>
                 <th>Name</th>
